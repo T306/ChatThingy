@@ -22,7 +22,7 @@ def recv_message(c):
     plain = c.recv(1024).decode()
     signd = c.recv(1024).decode()
     try:
-      partKey.verify(smsg, message)
+      partKey.verify(smsg, plain)
     except:
       sys.exit('Message Verification Failed')
     else:
@@ -50,13 +50,6 @@ elif choice.lower() == 'client':
 else:
   sys.exit('Invalid Option')
 
-shared_key = private_key.exchange(ec.ECDH(), partKey)
-derived_key = HKDF(
-    algorithm=hashes.SHA512(),
-    length=32,
-    salt=None,
-    info=b'handshake data',
-).derive(shared_key)
 
 threading.Thread(target=send_message,args=(client,))
 threading.Thread(target=recv_message,args=(client,))
