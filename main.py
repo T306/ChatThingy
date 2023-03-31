@@ -12,9 +12,9 @@ user = None
 
 def send_message(c):
   while True:
-    message = (user + ': ' + (input(user + ':')))
-    smsg = private_key.sign(message.encode())
-    c.send(message.encode())
+    message = (user + ': ' + (input(user + ':'))).encode()
+    smsg = (private_key.sign(message)).encode()
+    c.send(message)
     c.send(smsg)
 #    print(user + ': ' + message)
 def recv_message(c):
@@ -34,7 +34,6 @@ choice = input('Host or Connect?\n')
 
 if choice.lower() == 'host':
   server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-#  hostname = input('Enter Hostname or IP')
   server.bind(('0.0.0.0',7443))
   server.listen()
 
