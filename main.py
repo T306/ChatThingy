@@ -34,18 +34,19 @@ choice = input('Host or Connect?\n')
 
 if choice.lower() == 'host':
   server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-  server.bind(('0.0.0.0',7443))
+  server.bind(('0.0.0.0',443))
   server.listen()
 
   client,_ = server.accept()
-  client.send(pubKey)
-  partKey = client.recv(1024)
+  client.send(pubKey.encode())
+  partKey = client.recv(1024).decode()
 elif choice.lower() == 'client':
   serveraddr = input('Server IP: ')
   client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-  client.connect((serveraddr,7443))
-  client.send(pubKey)
-  partKey = client.recv(1024)
+  client.connect((serveraddr,443))
+  partKey = client.recv(1024).decode()
+  client.send(pubKey.encode())
+  
 else:
   sys.exit('Invalid Option')
 
